@@ -1,0 +1,24 @@
+{
+  "name": "space-cats",
+  "version": "1.0.0",
+  "description": "hellyeah wildhacks 2015",
+  "main": "index.html",
+  "dependencies": {
+    "twilio": "^2.5.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LOZORD/space-cats.git"
+  },
+  "author": "LOZORD",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/LOZORD/space-cats/issues"
+  },
+  "homepage": "https://github.com/LOZORD/space-cats#readme",
+  "readme": "https://github.com/LOZORD/space-cats#readme"
+}
