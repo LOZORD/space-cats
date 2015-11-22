@@ -47,7 +47,7 @@ var shipProperties = {
   drag: 100,
   maxVelocity: 300,
   angularVelocity: 200,
-  startingLives: 3,
+  startingLives: 1, //3,
   timeToReset: 3, // invuln time
 };
 
@@ -95,6 +95,11 @@ var fontAssets = {
     font: '20px monospace',
     fill: '#FFFFFF',
     align: 'center'
+  },
+  endScreenFontStyle: {
+    font: '70px monospace',
+    fill: '#FFFFFF',
+    align: 'center'
   }
 };
 
@@ -102,7 +107,7 @@ var fontAssets = {
 var gameState = function(game){
   this.background;
   this.shipSprite;
-  this.enableFiring;
+  this.enableFiring; //Set to enable/!disable firing (used when alive/!dead)
 
   this.key_left;
   this.key_right;
@@ -117,6 +122,8 @@ var gameState = function(game){
 
   this.shipLives = shipProperties.startingLives;
   this.tf_lives;
+
+  this.tf_gameOver;
 };
 
 gameState.prototype = {
@@ -280,11 +287,16 @@ gameState.prototype = {
     this.shipLives -= 1;
     this.tf_lives.text = this.shipLives.toString();
 
+    //Block firing.
+    this.enableFiring = false;
+
     if (this.shipLives > 0) {
       game.time.events.add(Phaser.Timer.SECOND * shipProperties.timeToReset, this.resetShip, this);
-      //TODO:Block firing.
-      this.enableFiring = false;
+    } else {
+      //End Game
+      this.endGame();
     }
+
   },
   resetShip: function() {
     this.shipSprite.reset(shipProperties.startX, shipProperties.startY);
@@ -292,11 +304,22 @@ gameState.prototype = {
     this.enableFiring = true;
   },
   splitAsteroid: function(asteroid) {
-    if (asteroidProperties[asteroid.key].nextSize) {
+    if (asteroidProperties[asteroid.key].nextSize && asteroid.isAlive) {
       this.createAsteroid(asteroid.x, asteroid.y,
           asteroidProperties[asteroid.key].nextSize,
           asteroidProperties[asteroid.key].pieces);
     }
+  },
+  endGame: function() {
+    //TODO: Fix allignment of end text.
+    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Game Over!", fontAssets.endScreenFontStyle);   
+    this.tf_lives.kill(); //Get rid of the live counter.
+    //TODO: Fix splitting of asteroid on final death.
+    this.bulletGroup.forEachAlive(this.killSprite, this);
+    this.asteroidGroup.forEachAlive(this.killSprite, this);
+  },
+  killSprite: function(sprite) {
+    sprite.kill();
   }
 };
 
