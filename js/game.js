@@ -113,6 +113,8 @@ var gameState = function(game){
   this.key_right;
   this.key_thrust;
   this.key_fire;
+  this.key_pause;
+  this.pauseKeyStillDown = false;
 
   this.bulletGroup;
   this.bulletInterval = 0;
@@ -139,6 +141,7 @@ gameState.prototype = {
     this.initPhysics();
     this.initKeyboard();
     this.resetAsteroids();
+    this.pauseGame(); //Pause game at startup.
   },
 
   update: function () {
@@ -152,7 +155,7 @@ gameState.prototype = {
     game.physics.arcade.overlap(this.shipSprite, this.asteroidGroup, this.asteroidCollision, null, this);
 
     if (this.asteroidGroup.countLiving() == 0)
-      this.winGame(); //TODO: Replace with a win.
+      this.winGame();
 
   },
 
@@ -186,11 +189,18 @@ gameState.prototype = {
     this.asteroidGroup.enableBody = true;
     this.asteroidGroup.physicsBodyType = Phaser.Physics.ARCADE;
   },
+  pauseGame: function(){
+    this.game.physics.arcade.isPaused = true;
+  },
+  togglePause: function() {
+    this.game.physics.arcade.isPaused = !this.game.physics.arcade.isPaused;
+  },
   initKeyboard: function() {
     this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.key_fire = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.key_pause = game.input.keyboard.addKey(Phaser.Keyboard.P);
     //wildhacks15 promo code
   },
   checkPlayerInput: function() {
@@ -212,6 +222,14 @@ gameState.prototype = {
     if (this.key_fire.isDown) {
       this.fire();
     }
+    if (this.key_pause.isDown) {
+      if (!this.pauseKeyStillDown) {
+        this.togglePause();
+        this.pauseKeyStillDown = true; 
+      }
+    }
+    else
+      this.pauseKeyStillDown = false;
   },
   checkBoundaries: function (sprite) {
     if (sprite.x < 0) {
