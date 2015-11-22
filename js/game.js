@@ -216,14 +216,21 @@ gameState.prototype = {
     this.game.physics.arcade.isPaused = !this.game.physics.arcade.isPaused;
   },
   restart: function () {
-    this.background.destroy();
-    this.shipSprite.destroy();
-    this.asteroidGroup.destroy();
-    this.bulletGroup.destroy();
+    if (this.background)
+      this.background.destroy();
+    if (this.shipSprite)
+      this.shipSprite.destroy();
+    if (this.asteroidGroup)
+      this.asteroidGroup.destroy();
+    if (this.bulletGroup)
+      this.bulletGroup.destroy();
     //destroy everything old.
     this.gameFinished = false;
-    this.tf_gameOver.destroy();
-    this.tf_lives.destroy();
+    if (this.tf_gameOver)
+      this.tf_gameOver.destroy();
+    
+    if (this.tf_lives)
+      this.tf_lives.destroy();
     this.shipLives = shipProperties.startingLives;
     this.create();
   },
