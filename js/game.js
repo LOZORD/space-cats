@@ -115,8 +115,6 @@ var gameState = function(game){
   this.key_fire;
   this.key_pause;
 
-  //A boolean flag used to only read input of the down pause key once.
-  this.pauseKeyStillDown = false;
   this.gameFinished = false;
 
   this.bulletGroup;
@@ -204,6 +202,7 @@ gameState.prototype = {
     this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.key_fire = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.key_pause = game.input.keyboard.addKey(Phaser.Keyboard.P);
+    this.key_pause.onDown.add(this.togglePause, this);
     //wildhacks15 promo code
   },
   checkPlayerInput: function() {
@@ -225,14 +224,6 @@ gameState.prototype = {
     if (this.key_fire.isDown) {
       this.fire();
     }
-    if (this.key_pause.isDown) {
-      if (!this.pauseKeyStillDown) {
-        this.togglePause();
-        this.pauseKeyStillDown = true; 
-      }
-    }
-    else
-      this.pauseKeyStillDown = false;
   },
   checkBoundaries: function (sprite) {
     if (sprite.x < 0) {
