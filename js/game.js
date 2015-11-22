@@ -1,6 +1,6 @@
 var gameProperties = {
-  screenWidth: 640,
-  screenHeight: 480,
+  screenWidth: 1280,
+  screenHeight: 800,
 };
 
 var states = {
@@ -8,6 +8,10 @@ var states = {
 };
 
 var graphicAssets = {
+  background: {
+    URL: 'assets/background.png',
+    name: 'background'
+  },
   ship: {
     URL: 'assets/ship.png',
     name: 'ship'
@@ -31,6 +35,11 @@ var graphicAssets = {
 };
 
 /* PROPERTIES */
+var backgroundProperties  = {
+  startX: gameProperties.screenWidth  * 1.0/2,
+  startY: gameProperties.screenHeight * 1.0/2,
+};
+
 var shipProperties = {
   startX: gameProperties.screenWidth  * 1.0/2,
   startY: gameProperties.screenHeight * 1.0/2,
@@ -39,7 +48,7 @@ var shipProperties = {
   maxVelocity: 300,
   angularVelocity: 200,
   startingLives: 3,
-  timeToReset: 3 // invuln time
+  timeToReset: 3, // invuln time
 };
 
 var bulletProperties = {
@@ -91,6 +100,7 @@ var fontAssets = {
 
 /* GAME STATE */
 var gameState = function(game){
+  this.background;
   this.shipSprite;
 
   this.key_left;
@@ -135,6 +145,8 @@ gameState.prototype = {
   },
 
   initGraphics: function() {
+    this.background = game.add.sprite(backgroundProperties.startX, backgroundProperties.startY, graphicAssets.background.name);
+
     this.shipSprite = game.add.sprite(shipProperties.startX, shipProperties.startY, graphicAssets.ship.name);
     this.shipSprite.angle = -90;
     this.shipSprite.anchor.set(0.5, 0.5);
@@ -268,6 +280,7 @@ gameState.prototype = {
 
     if (this.shipLives > 0) {
       game.time.events.add(Phaser.Timer.SECOND * shipProperties.timeToReset, this.resetShip, this);
+      //TODO:Block firing.
     }
   },
   resetShip: function() {
