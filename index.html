@@ -1,13 +1,49 @@
 <!doctype html>
 <html>
     <head>
-        <title>Pong</title>
+        <title>SPACE CATS!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
         <script src="js/phaser.min.js"></script>
-        <script src="js/game.js"></script>        
+        <script src="js/game.js"></script>
+        <script src="js/frontend_ws.js"></script>
+        <style>
+          #messageBox {
+            border: 1px solid black;
+            height: 50vh;
+            width: 100%;
+            font-family: monospace;
+            background-color: #333;
+            color: lime;
+            padding: 1em;
+          }
+          #messageBox h1 {
+            color: hotpink;
+            text-align: center;
+          }
+          #messageBox h2 {
+            color: cyan;
+            text-align: center;
+          }
+          #messageBox #conC {
+            color: tomato;
+          }
+          #messageBox #conO {
+            color: orange;
+            display: none;
+          }
+        </style>
     </head>
     <body>
         <div id="gameDiv"> </div>
+        </br>
+        <div id='messageBox'>
+          <h1><i class='em em-rocket'></i> WELCOME TO SPACE CATS <i class='em em-smile_cat'></i></h1>
+          <h2 id='conC'><i class='em em-disappointed'></i> CONNECTION CLOSED <i class='em em-disappointed'></i></h2>
+          <h2 id='conO'><i class='em em-sunglasses'></i> CONNECTION OPEN <i class='em em-sunglasses'></i></h2>
+          <h2><i class='em em-phone'></i> Unique phone numbers: <span id='uniqCtr'>0</span> <i class='em em-phone'></i></h2>
+          <div id='messages'></div>
+        </div>
     </body>
 </html>
