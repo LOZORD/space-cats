@@ -1,3 +1,4 @@
+var ALLOW_TEXT_MESSAGE_INPUT = true;
 (function() {
   var WS = window.WebSocket || window.MozWebSocket;
 
@@ -26,14 +27,14 @@
     if (typeof data === 'string') {
       data = JSON.parse(data);
     }
-    var message = data.message;
+    var message = data.message.trim();
     var fromNumber = data.from;
     var timeStamp = messageEvent.timeStamp;
     var time = new Date(timeStamp);
 
     // add the message to the box
     document.getElementById('messages').innerHTML +=
-      '<i class="em em-telephone-receiver"></i>' + time.toLocaleTimeString()
+      '<i class="em em-telephone_receiver"></i>' + time.toLocaleTimeString()
       + '&nbsp;:&nbsp;' + fromNumber + ' said "' + message + '"</br>';
 
     // check for unique numbers
@@ -44,5 +45,45 @@
       var uniqCtr = document.getElementById('uniqCtr');
       uniqCtr.innerHTML = uniqueNumberCount.toString();
     }
+
+    if (ALLOW_TEXT_MESSAGE_INPUT && GAME_STATE_SCOPE) {
+      if (isThrustInput(message)) {
+        GAME_STATE_SCOPE.accelerateShip(20);
+        console.log('THRUSTING');
+      } else if (isLeftInput(message)) {
+        GAME_STATE_SCOPE.rotateShipLeft(30);
+        console.log('L ROTATE');
+      } else if (isRightInput(message)) {
+        GAME_STATE_SCOPE.rotateShipRight(30);
+        console.log('R ROTATE');
+      } else if (isFireInput(message)) {
+        GAME_STATE_SCOPE.fire();
+        console.log('FIRE');
+      } else {
+       // do nothing
+      }
+    }
   };
 })();
+
+function isThrustInput(m) {
+  return (m === 'u' ||
+          m === 'U');
+}
+
+function isLeftInput(m) {
+  return (m === 'l' ||
+          m === 'L');
+}
+
+function isRightInput(m) {
+  return (m === 'r' ||
+          m === 'R');
+}
+
+function isFireInput(m) {
+  return (m === 'f' ||
+          m === 'F' ||
+          m === 's' ||
+          m === 'S');
+}

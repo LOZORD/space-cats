@@ -7,6 +7,9 @@ var states = {
   game: "game",
 };
 
+// the hack of the century FIXME FIXME FIXME
+var GAME_STATE_SCOPE;
+
 var graphicAssets = {
   background: {
     URL: 'assets/background.png',
@@ -139,6 +142,7 @@ gameState.prototype = {
     this.initPhysics();
     this.initKeyboard();
     this.resetAsteroids();
+    GAME_STATE_SCOPE = this;
   },
 
   update: function () {
@@ -149,7 +153,7 @@ gameState.prototype = {
 
     // check for collisions
     game.physics.arcade.overlap(this.bulletGroup, this.asteroidGroup, this.asteroidCollision, null, this);
-    game.physics.arcade.overlap(this.shipSprite, this.asteroidGroup, this.asteroidCollision, null, this);
+    //game.physics.arcade.overlap(this.shipSprite, this.asteroidGroup, this.asteroidCollision, null, this); XXX GOD MODE
 
     if (this.asteroidGroup.countLiving() == 0)
       this.winGame(); //TODO: Replace with a win.
@@ -212,18 +216,21 @@ gameState.prototype = {
       this.fire();
     }
   },
-  rotateShipLeft: function() {
-    this.shipSprite.body.angularVelocity = -shipProperties.angularVelocity;
+  rotateShipLeft: function(n) {
+    n = n || 1;
+    this.shipSprite.body.angularVelocity = -shipProperties.angularVelocity * n;
   },
-  rotateShipRight: function() {
-    this.shipSprite.body.angularVelocity = shipProperties.angularVelocity;
+  rotateShipRight: function(n) {
+    n = n || 1;
+    this.shipSprite.body.angularVelocity = shipProperties.angularVelocity * n;
   },
   stopShipRotation: function() {
     this.shipSprite.body.angularVelocity = 0;
   },
-  accelerateShip: function() {
+  accelerateShip: function(n) {
+    n = n || 1;
     game.physics.arcade.accelerationFromRotation(this.shipSprite.rotation,
-        shipProperties.acceleration, this.shipSprite.body.acceleration);
+        shipProperties.acceleration * n, this.shipSprite.body.acceleration);
   },
   stopAcceleration: function() {
     this.shipSprite.body.acceleration.set(0);
