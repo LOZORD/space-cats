@@ -150,6 +150,10 @@ gameState.prototype = {
     // check for collisions
     game.physics.arcade.overlap(this.bulletGroup, this.asteroidGroup, this.asteroidCollision, null, this);
     game.physics.arcade.overlap(this.shipSprite, this.asteroidGroup, this.asteroidCollision, null, this);
+
+    if (this.asteroidGroup.countLiving() == 0)
+      this.winGame(); //TODO: Replace with a win.
+
   },
 
   initGraphics: function() {
@@ -294,7 +298,7 @@ gameState.prototype = {
       game.time.events.add(Phaser.Timer.SECOND * shipProperties.timeToReset, this.resetShip, this);
     } else {
       //End Game
-      this.endGame();
+      this.loseGame();
     }
 
   },
@@ -304,16 +308,25 @@ gameState.prototype = {
     this.enableFiring = true;
   },
   splitAsteroid: function(asteroid) {
-    if (asteroidProperties[asteroid.key].nextSize && asteroid.isAlive) {
+    if (asteroidProperties[asteroid.key].nextSize) {
       this.createAsteroid(asteroid.x, asteroid.y,
           asteroidProperties[asteroid.key].nextSize,
           asteroidProperties[asteroid.key].pieces);
     }
   },
-  endGame: function() {
+  winGame: function() {
     //TODO: Fix allignment of end text.
-    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Game Over!", fontAssets.endScreenFontStyle);   
-    this.tf_lives.kill(); //Get rid of the live counter.
+    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Congrats! Game Over.", fontAssets.endScreenFontStyle);   
+    this.endGame();
+  },
+  loseGame: function() {
+    //TODO: Fix allignment of end text.
+    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "YOU LOSE Game Over!", fontAssets.endScreenFontStyle);   
+    this.endGame();
+  },
+  endGame: function() {
+    //TODO: Disable input to ship/unload ship on end.
+    this.tf_lives.kill(); //Get rid of the life counter.
     //TODO: Fix splitting of asteroid on final death.
     this.bulletGroup.forEachAlive(this.killSprite, this);
     this.asteroidGroup.forEachAlive(this.killSprite, this);
