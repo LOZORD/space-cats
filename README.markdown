@@ -9,6 +9,8 @@ Based on the [Asteroids Tutorial](http://www.zekechan.net/asteroids-html5-game-t
 
 ## To run:
 
+__NOTE__: You must use a local server such as Mongoose to run the game!
+
 * First run `npm install`
 * Then download and run `ngrok` for your respective OS
 * Go to the link it says is `Forwarding`
