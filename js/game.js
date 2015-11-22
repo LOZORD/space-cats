@@ -198,11 +198,12 @@ gameState.prototype = {
     this.game.physics.arcade.isPaused = !this.game.physics.arcade.isPaused;
   },
   restart: function () {
-      this.background.destroy();
-      this.shipSprite.destroy();
-      this.asteroidGroup.destroy();
-      this.bulletGroup.destroy();
+    this.background.destroy();
+    this.shipSprite.destroy();
+    this.asteroidGroup.destroy();
+    this.bulletGroup.destroy();
     //destroy everything old.
+    this.gameFinished = false;
     this.create();
   },
   initKeyboard: function() {
