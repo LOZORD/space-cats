@@ -68,22 +68,33 @@ var ALLOW_TEXT_MESSAGE_INPUT = true;
 
 function isThrustInput(m) {
   return (m === 'u' ||
-          m === 'U');
+          m === 'U' ||
+          m === 't' ||
+          m === 'T' ||
+          m === '🚀' ||
+          m === '🔼' ||
+          m === '⬆️');
 }
 
 function isLeftInput(m) {
   return (m === 'l' ||
-          m === 'L');
+          m === 'L' ||
+          m === '◀️' ||
+          m === '⬅️');
 }
 
 function isRightInput(m) {
   return (m === 'r' ||
-          m === 'R');
+          m === 'R' ||
+          m === '▶️' ||
+          m === '➡️');
 }
 
 function isFireInput(m) {
   return (m === 'f' ||
           m === 'F' ||
           m === 's' ||
-          m === 'S');
+          m === 'S' ||
+          m === '🔫' ||
+          m === '💣');
 }
