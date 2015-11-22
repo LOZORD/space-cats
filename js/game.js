@@ -114,6 +114,8 @@ var gameState = function(game){
   this.key_thrust;
   this.key_fire;
   this.key_pause;
+
+  //A boolean flag used to only read input of the down pause key once.
   this.pauseKeyStillDown = false;
 
   this.bulletGroup;
@@ -245,7 +247,7 @@ gameState.prototype = {
     }
   },
   fire: function () {
-    if (game.time.now > this.bulletInterval && this.enableFiring) {            
+    if (game.time.now > this.bulletInterval && this.enableFiring && !this.game.physics.arcade.isPaused) {
       var bullet = this.bulletGroup.getFirstExists(false);
 
       if (bullet) {
@@ -344,7 +346,6 @@ gameState.prototype = {
     this.endGame();
   },
   endGame: function() {
-    //TODO: Disable input to ship/unload ship on end.
     this.tf_lives.kill(); //Get rid of the life counter.
     this.bulletGroup.forEachAlive(this.killSprite, this);
     this.asteroidGroup.forEachAlive(this.killSprite, this);
