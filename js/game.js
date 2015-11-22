@@ -302,8 +302,9 @@ gameState.prototype = {
     if (target.key === graphicAssets.ship.name) {
       this.destroyShip();
     }
-
-    this.splitAsteroid(asteroid);
+    //Don't split if game is over (fixes bug of floating garbage)
+    if (this.shipLives > 0)
+      this.splitAsteroid(asteroid);
   },
   destroyShip: function() {
     this.shipLives -= 1;
@@ -345,7 +346,6 @@ gameState.prototype = {
   endGame: function() {
     //TODO: Disable input to ship/unload ship on end.
     this.tf_lives.kill(); //Get rid of the life counter.
-    //TODO: Fix splitting of asteroid on final death.
     this.bulletGroup.forEachAlive(this.killSprite, this);
     this.asteroidGroup.forEachAlive(this.killSprite, this);
   },
