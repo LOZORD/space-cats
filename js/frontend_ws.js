@@ -21,7 +21,17 @@ console.log('outside');
 
   connection.onmessage = function(messageEvent) {
     console.log(messageEvent);
-    //console.log('MESSAGE: %s', message);
+    var data   = messageEvent.data;
+    if (typeof data === 'string') {
+      data = JSON.parse(data);
+    }
+    var message = data.message;
+    var fromNumber = data.from;
+    var timeStamp = messageEvent.timeStamp;
+    var time = new Date(timeStamp);
+    console.log(message);
+    document.getElementById('messages').innerHTML +=
+      time.toLocaleTimeString() + '&nbsp;:&nbsp;' + fromNumber + ' said "' + message + '"</br>';
   };
   console.log('done inside');
 })();

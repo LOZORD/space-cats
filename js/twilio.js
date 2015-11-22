@@ -24,11 +24,17 @@ var connection = function(ws) {
   app.get('/message', function(req, res) {
     //res.send('<Response><Message>Thanks for letting us know.</Message></Response>');
     res.send(textMessageResponse);
+    //console.log(req);
     var textMessageData = req.query.Body;
+    var texterNumber    = req.query.From;
     if (textMessageData) {
       console.log(textMessageData);
       if (ws && ws.send) {
-        ws.send(textMessageData);
+        //ws.send(textMessageData);
+        ws.send(JSON.stringify({
+          message:  textMessageData,
+          from:     texterNumber
+        }));
       }
     }
     //ws.send(req.query.Body);
