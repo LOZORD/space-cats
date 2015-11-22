@@ -117,6 +117,7 @@ var gameState = function(game){
 
   //A boolean flag used to only read input of the down pause key once.
   this.pauseKeyStillDown = false;
+  this.gameFinished = false;
 
   this.bulletGroup;
   this.bulletInterval = 0;
@@ -336,9 +337,13 @@ gameState.prototype = {
     }
   },
   winGame: function() {
-    //TODO: Fix allignment of end text.
-    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Congrats! Game Over.", fontAssets.endScreenFontStyle);   
-    this.endGame();
+
+    //Don't allow winning after losing (since we remove all the asteroids on finish).
+    if (!this.gameFinished) {
+      //TODO: Fix allignment of end text.
+      this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Congrats! Game Over.", fontAssets.endScreenFontStyle);   
+      this.endGame();
+    }
   },
   loseGame: function() {
     //TODO: Fix allignment of end text.
@@ -349,6 +354,7 @@ gameState.prototype = {
     this.tf_lives.kill(); //Get rid of the life counter.
     this.bulletGroup.forEachAlive(this.killSprite, this);
     this.asteroidGroup.forEachAlive(this.killSprite, this);
+    this.gameFinished = true;
   },
   killSprite: function(sprite) {
     sprite.kill();
