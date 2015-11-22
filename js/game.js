@@ -39,8 +39,11 @@ var graphicAssets = {
 
 /* PROPERTIES */
 var backgroundProperties  = {
-  startX: gameProperties.screenWidth  * 1.0/2,
-  startY: gameProperties.screenHeight * 1.0/2,
+  startX: -gameProperties.screenWidth, //gameProperties.screenWidth  * 1.0/2,
+  startY: 0, //gameProperties.screenHeight * 1.0/2,
+  width: gameProperties.screenWidth *2,
+  height: gameProperties.screenHeight *2,
+  xMovement: 0.80,
 };
 
 var shipProperties = {
@@ -155,6 +158,13 @@ gameState.prototype = {
     this.checkBoundaries(this.shipSprite);
     this.bulletGroup.forEachExists(this.checkBoundaries, this);
     this.asteroidGroup.forEachExists(this.checkBoundaries, this);
+    if (this.background.x <= 0) { // backgroundProperties.width / 2)
+      this.background.x += backgroundProperties.xMovement;
+    }
+    else { 
+      this.background.x = backgroundProperties.startX;
+      this.background.x += backgroundProperties.xMovement;
+    }
 
     // check for collisions
     game.physics.arcade.overlap(this.bulletGroup, this.asteroidGroup, this.asteroidCollision, null, this);
@@ -167,7 +177,8 @@ gameState.prototype = {
 
   initGraphics: function() {
     //this.background = game.add.sprite(backgroundProperties.startX, backgroundProperties.startY, graphicAssets.background.name);
-    this.background = game.add.tileSprite(0, 0, gameProperties.screenWidth, gameProperties.screenHeight, graphicAssets.background.name);
+    //this.background = game.add.tileSprite(0, 0, gameProperties.screenWidth, gameProperties.screenHeight, graphicAssets.background.name);
+    this.background = game.add.tileSprite(backgroundProperties.startX, backgroundProperties.startY, backgroundProperties.width, backgroundProperties.height, graphicAssets.background.name);
 
     this.shipSprite = game.add.sprite(shipProperties.startX, shipProperties.startY, graphicAssets.ship.name);
     this.shipSprite.angle = 0;
