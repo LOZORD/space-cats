@@ -204,6 +204,7 @@ gameState.prototype = {
     this.bulletGroup.destroy();
     //destroy everything old.
     this.gameFinished = false;
+    this.shipLives = shipProperties.startingLives;
     this.create();
   },
   initKeyboard: function() {
@@ -354,7 +355,7 @@ gameState.prototype = {
     this.endGame();
   },
   endGame: function() {
-    this.tf_lives.kill(); //Get rid of the life counter.
+    this.tf_lives.destroy(); //Get rid of the life counter.
     this.bulletGroup.forEachAlive(this.killSprite, this);
     this.asteroidGroup.forEachAlive(this.killSprite, this);
     this.gameFinished = true;
