@@ -4,7 +4,8 @@
   "description": "hellyeah wildhacks 2015",
   "main": "index.html",
   "dependencies": {
-    "twilio": "^2.5.2"
+    "twilio": "^2.5.2",
+    "ws": "^0.8.0"
   },
   "devDependencies": {
     "express": "^4.13.3"
