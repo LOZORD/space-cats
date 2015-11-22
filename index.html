@@ -9,39 +9,50 @@
         <script src="js/game.js"></script>
         <script src="js/frontend_ws.js"></script>
         <style>
+
+	body{
+	background-color:#1CB362; 
+}
+
           #messageBox {
             border: 1px solid black;
             height: 50vh;
             width: 100%;
             font-family: monospace;
             background-color: #444;
-            color: lime;
+            color: white;
             padding: 1em;
           }
+	#messageBox span {
+		color: lime;
+	}
           #messageBox h1 {
-            color: hotpink;
+      
             text-align: center;
           }
           #messageBox h2 {
-            color: cyan;
+         
             text-align: center;
           }
           #messageBox #conC {
-            color: tomato;
+       
           }
           #messageBox #conO {
             color: orange;
             display: none;
           }
-          .c {
-            font-family: cursive;
-          }
+     
           .cmd {
             color: magenta;
           }
+	#gameDiv {
+		margin: auto;
+		text-align: center;
+	}
         </style>
     </head>
     <body>
+	<img src='assets/websitetitle2.png'/>
         <div id="gameDiv"> </div>
         </br>
         <div id='messageBox'>
