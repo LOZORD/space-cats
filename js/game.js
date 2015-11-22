@@ -114,6 +114,7 @@ var gameState = function(game){
   this.key_thrust;
   this.key_fire;
   this.key_pause;
+  this.key_restart;
 
   this.gameFinished = false;
 
@@ -196,6 +197,14 @@ gameState.prototype = {
   togglePause: function() {
     this.game.physics.arcade.isPaused = !this.game.physics.arcade.isPaused;
   },
+  restart: function () {
+      this.background.destroy();
+      this.shipSprite.destroy();
+      this.asteroidGroup.destroy();
+      this.bulletGroup.destroy();
+    //destroy everything old.
+    this.create();
+  },
   initKeyboard: function() {
     this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -203,6 +212,8 @@ gameState.prototype = {
     this.key_fire = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.key_pause = game.input.keyboard.addKey(Phaser.Keyboard.P);
     this.key_pause.onDown.add(this.togglePause, this);
+    this.key_restart = game.input.keyboard.addKey(Phaser.Keyboard.R);
+    this.key_restart.onDown.add(this.restart, this);
     //wildhacks15 promo code
   },
   checkPlayerInput: function() {
