@@ -13,7 +13,9 @@ var GAME_STATE_SCOPE;
 var graphicAssets = {
   background: {
     URL: 'assets/background3.png',
-    name: 'background'
+    name: 'background',
+    width: 190,
+    height: 127,
   },
   ship: {
     URL: 'assets/spacecat_small.png',
@@ -39,7 +41,7 @@ var graphicAssets = {
 
 /* PROPERTIES */
 var backgroundProperties  = {
-  startX: -gameProperties.screenWidth, //gameProperties.screenWidth  * 1.0/2,
+  startX: -graphicAssets.background.width * 10, //FIXME //gameProperties.screenWidth  * 1.0/2,
   startY: 0, //gameProperties.screenHeight * 1.0/2,
   width: gameProperties.screenWidth *2,
   height: gameProperties.screenHeight *2,
@@ -177,8 +179,8 @@ gameState.prototype = {
 
   initGraphics: function() {
     //this.background = game.add.sprite(backgroundProperties.startX, backgroundProperties.startY, graphicAssets.background.name);
-    //this.background = game.add.tileSprite(0, 0, gameProperties.screenWidth, gameProperties.screenHeight, graphicAssets.background.name);
-    this.background = game.add.tileSprite(backgroundProperties.startX, backgroundProperties.startY, backgroundProperties.width, backgroundProperties.height, graphicAssets.background.name);
+    //this.background = game.add.tileSprite(0, 0, gameProperties.screenWidth, gameProperties.screenHeight, graphicAssets.background.name); 
+    this.background = game.add.tileSprite(backgroundProperties.startX, backgroundProperties.startY, graphicAssets.background.width * 10 * 2, backgroundProperties.height, graphicAssets.background.name);
 
     this.shipSprite = game.add.sprite(shipProperties.startX, shipProperties.startY, graphicAssets.ship.name);
     this.shipSprite.angle = 0;
