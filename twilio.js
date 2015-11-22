@@ -4,8 +4,8 @@ var express = require('express');
 var app = express();
 
 app.get('/message', function(req, res) {
-  res.send('Thanks!');
-  console.log(req);
+  res.send('<Response><Message>Thanks for letting us know.</Message></Response>');
+  console.log(req.query.Body);
 });
 
 var server = app.listen(3000, function() {
