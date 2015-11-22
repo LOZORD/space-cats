@@ -31,22 +31,10 @@ var ALLOW_TEXT_MESSAGE_INPUT = true;
     var fromNumber = data.from;
     var timeStamp = messageEvent.timeStamp;
     var time = new Date(timeStamp);
-
-    // add the message to the box
-    document.getElementById('messages').innerHTML +=
-      '<i class="em em-telephone_receiver"></i>' + time.toLocaleTimeString()
-      + '&nbsp;:&nbsp;' + fromNumber + ' said "' + message + '"</br>';
-
-    // check for unique numbers
-    if (!numbersHash.hasOwnProperty(fromNumber)) {
-      numbersHash[fromNumber] = timeStamp;
-      uniqueNumberCount += 1;
-      console.log('Seen %d numbers', uniqueNumberCount);
-      var uniqCtr = document.getElementById('uniqCtr');
-      uniqCtr.innerHTML = uniqueNumberCount.toString();
-    }
+    var isCmd = '';
 
     if (ALLOW_TEXT_MESSAGE_INPUT && GAME_STATE_SCOPE) {
+      isCmd = 'cmd';
       if (isThrustInput(message)) {
         GAME_STATE_SCOPE.accelerateShip(20);
         console.log('THRUSTING');
@@ -61,7 +49,22 @@ var ALLOW_TEXT_MESSAGE_INPUT = true;
         console.log('FIRE');
       } else {
        // do nothing
+       isCmd = '';
       }
+    }
+
+    // add the message to the box
+    document.getElementById('messages').innerHTML +=
+      '<span class="' + isCmd + '"><i class="em em-telephone_receiver"></i>' + time.toLocaleTimeString()
+      + '&nbsp;:&nbsp;' + fromNumber + ' said "' + message + '"</span></br>';
+
+    // check for unique numbers
+    if (!numbersHash.hasOwnProperty(fromNumber)) {
+      numbersHash[fromNumber] = timeStamp;
+      uniqueNumberCount += 1;
+      console.log('Seen %d numbers', uniqueNumberCount);
+      var uniqCtr = document.getElementById('uniqCtr');
+      uniqCtr.innerHTML = uniqueNumberCount.toString();
     }
   };
 })();

@@ -12,27 +12,27 @@ var GAME_STATE_SCOPE;
 
 var graphicAssets = {
   background: {
-    URL: 'assets/background.png',
+    URL: 'assets/background3.png',
     name: 'background'
   },
   ship: {
-    URL: 'assets/ship.png',
+    URL: 'assets/spacecat_small.png',
     name: 'ship'
   },
   bullet: {
-    URL: 'assets/bullet.png',
+    URL: 'assets/bullet_red.png',
     name: 'bullet'
   },
   asteroidLarge: {
-    URL: 'assets/asteroidLarge.png',
+    URL: 'assets/asteroid_large.png',
     name: 'asteroidLarge'
   },
   asteroidMedium: {
-    URL: 'assets/asteroidMedium.png',
+    URL: 'assets/asteroid_medium.png',
     name: 'asteroidMedium'
   },
   asteroidSmall: {
-    URL: 'assets/asteroidSmall.png',
+    URL: 'assets/asteroid_small.png',
     name: 'asteroidSmall'
   }
 };
@@ -50,7 +50,7 @@ var shipProperties = {
   drag: 100,
   maxVelocity: 300,
   angularVelocity: 200,
-  startingLives: 1, //3,
+  startingLives: 1, //3, // number of lives
   timeToReset: 3, // invuln time
 };
 
@@ -166,10 +166,11 @@ gameState.prototype = {
   },
 
   initGraphics: function() {
-    this.background = game.add.sprite(backgroundProperties.startX, backgroundProperties.startY, graphicAssets.background.name);
+    //this.background = game.add.sprite(backgroundProperties.startX, backgroundProperties.startY, graphicAssets.background.name);
+    this.background = game.add.tileSprite(0, 0, gameProperties.screenWidth, gameProperties.screenHeight, graphicAssets.background.name);
 
     this.shipSprite = game.add.sprite(shipProperties.startX, shipProperties.startY, graphicAssets.ship.name);
-    this.shipSprite.angle = -90;
+    this.shipSprite.angle = 0;
     this.shipSprite.anchor.set(0.5, 0.5);
 
     this.bulletGroup = game.add.group();
@@ -377,7 +378,7 @@ gameState.prototype = {
     this.endGame();
   },
   endGame: function() {
-    this.tf_lives.destroy(); //Get rid of the life counter.
+    //this.tf_lives.destroy(); //Get rid of the life counter.
     this.bulletGroup.forEachAlive(this.killSprite, this);
     this.asteroidGroup.forEachAlive(this.killSprite, this);
     this.gameFinished = true;
