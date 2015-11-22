@@ -116,6 +116,10 @@ var gameState = function(game){
   this.key_right;
   this.key_thrust;
   this.key_fire;
+  this.key_pause;
+  this.key_restart;
+
+  this.gameFinished = false;
 
   this.bulletGroup;
   this.bulletInterval = 0;
@@ -142,6 +146,7 @@ gameState.prototype = {
     this.initPhysics();
     this.initKeyboard();
     this.resetAsteroids();
+    this.pauseGame(); //Pause game at startup.
     GAME_STATE_SCOPE = this;
   },
 
@@ -156,7 +161,7 @@ gameState.prototype = {
     //game.physics.arcade.overlap(this.shipSprite, this.asteroidGroup, this.asteroidCollision, null, this); XXX GOD MODE
 
     if (this.asteroidGroup.countLiving() == 0)
-      this.winGame(); //TODO: Replace with a win.
+      this.winGame();
 
   },
 
@@ -190,11 +195,31 @@ gameState.prototype = {
     this.asteroidGroup.enableBody = true;
     this.asteroidGroup.physicsBodyType = Phaser.Physics.ARCADE;
   },
+  pauseGame: function(){
+    this.game.physics.arcade.isPaused = true;
+  },
+  togglePause: function() {
+    this.game.physics.arcade.isPaused = !this.game.physics.arcade.isPaused;
+  },
+  restart: function () {
+    this.background.destroy();
+    this.shipSprite.destroy();
+    this.asteroidGroup.destroy();
+    this.bulletGroup.destroy();
+    //destroy everything old.
+    this.gameFinished = false;
+    this.shipLives = shipProperties.startingLives;
+    this.create();
+  },
   initKeyboard: function() {
     this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.key_fire = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.key_pause = game.input.keyboard.addKey(Phaser.Keyboard.P);
+    this.key_pause.onDown.add(this.togglePause, this);
+    this.key_restart = game.input.keyboard.addKey(Phaser.Keyboard.R);
+    this.key_restart.onDown.add(this.restart, this);
     //wildhacks15 promo code
   },
   checkPlayerInput: function() {
@@ -240,7 +265,7 @@ gameState.prototype = {
       sprite.x = game.width;
     } else if (sprite.x > game.width) {
       sprite.x = 0;
-    } 
+    }
 
     if (sprite.y < 0) {
       sprite.y = game.height;
@@ -249,7 +274,7 @@ gameState.prototype = {
     }
   },
   fire: function () {
-    if (game.time.now > this.bulletInterval && this.enableFiring) {            
+    if (game.time.now > this.bulletInterval && this.enableFiring && !this.game.physics.arcade.isPaused) {
       var bullet = this.bulletGroup.getFirstExists(false);
 
       if (bullet) {
@@ -306,8 +331,9 @@ gameState.prototype = {
     if (target.key === graphicAssets.ship.name) {
       this.destroyShip();
     }
-
-    this.splitAsteroid(asteroid);
+    //Don't split if game is over (fixes bug of floating garbage)
+    if (this.shipLives > 0)
+      this.splitAsteroid(asteroid);
   },
   destroyShip: function() {
     this.shipLives -= 1;
@@ -337,21 +363,24 @@ gameState.prototype = {
     }
   },
   winGame: function() {
-    //TODO: Fix allignment of end text.
-    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Congrats! Game Over.", fontAssets.endScreenFontStyle);   
-    this.endGame();
+
+    //Don't allow winning after losing (since we remove all the asteroids on finish).
+    if (!this.gameFinished) {
+      //TODO: Fix allignment of end text.
+      this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Congrats! Game Over.", fontAssets.endScreenFontStyle);
+      this.endGame();
+    }
   },
   loseGame: function() {
     //TODO: Fix allignment of end text.
-    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "YOU LOSE Game Over!", fontAssets.endScreenFontStyle);   
+    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "YOU LOSE Game Over!", fontAssets.endScreenFontStyle);
     this.endGame();
   },
   endGame: function() {
-    //TODO: Disable input to ship/unload ship on end.
-    this.tf_lives.kill(); //Get rid of the life counter.
-    //TODO: Fix splitting of asteroid on final death.
+    this.tf_lives.destroy(); //Get rid of the life counter.
     this.bulletGroup.forEachAlive(this.killSprite, this);
     this.asteroidGroup.forEachAlive(this.killSprite, this);
+    this.gameFinished = true;
   },
   killSprite: function(sprite) {
     sprite.kill();
