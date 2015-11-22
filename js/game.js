@@ -107,7 +107,7 @@ var fontAssets = {
   endScreenFontStyle: {
     font: '70px monospace',
     fill: '#FFFFFF',
-    align: 'center'
+    align: 'left'//'center'
   }
 };
 
@@ -222,6 +222,8 @@ gameState.prototype = {
     this.bulletGroup.destroy();
     //destroy everything old.
     this.gameFinished = false;
+    this.tf_gameOver.destroy();
+    this.tf_lives.destroy();
     this.shipLives = shipProperties.startingLives;
     this.create();
   },
@@ -381,13 +383,13 @@ gameState.prototype = {
     //Don't allow winning after losing (since we remove all the asteroids on finish).
     if (!this.gameFinished) {
       //TODO: Fix allignment of end text.
-      this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Congrats! Game Over.", fontAssets.endScreenFontStyle);
+      this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "Congrats!", fontAssets.endScreenFontStyle);
       this.endGame();
     }
   },
   loseGame: function() {
     //TODO: Fix allignment of end text.
-    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "YOU LOSE Game Over!", fontAssets.endScreenFontStyle);
+    this.tf_gameOver = game.add.text(gameProperties.screenWidth/2, gameProperties.screenHeight/2, "YOU LOSE!", fontAssets.endScreenFontStyle);
     this.endGame();
   },
   endGame: function() {
