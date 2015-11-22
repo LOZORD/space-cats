@@ -1,26 +1,27 @@
 (function() {
   var WS = window.WebSocket || window.MozWebSocket;
-  var numbersHash = {};
-  var uniqueNumberCount = 0;
 
   if (!WS) {
     window.alert('NEED WEB SOCKETS!');
+    return;
   }
 
+  var numbersHash = {};
+  var uniqueNumberCount = 0;
   var connection = new WS('ws://127.0.0.1:3000');
-  //console.log(connection);
 
   connection.onopen = function() {
     connection.send('frontend is open!');
-    //console.log('open!');
+    document.getElementById('conC').style.display = 'none';
+    document.getElementById('conO').style.display = 'inherit';
   };
 
   connection.onerror = function(error) {
+    console.log('ERROR! ERROR! ERROR!');
     console.log(error);
   }
 
   connection.onmessage = function(messageEvent) {
-    //console.log(messageEvent);
     var data   = messageEvent.data;
     if (typeof data === 'string') {
       data = JSON.parse(data);
@@ -29,11 +30,13 @@
     var fromNumber = data.from;
     var timeStamp = messageEvent.timeStamp;
     var time = new Date(timeStamp);
-    //console.log(message);
+
+    // add the message to the box
     document.getElementById('messages').innerHTML +=
       '<i class="em em-telephone-receiver"></i>' + time.toLocaleTimeString()
       + '&nbsp;:&nbsp;' + fromNumber + ' said "' + message + '"</br>';
 
+    // check for unique numbers
     if (!numbersHash.hasOwnProperty(fromNumber)) {
       numbersHash[fromNumber] = timeStamp;
       uniqueNumberCount += 1;
@@ -42,6 +45,4 @@
       uniqCtr.innerHTML = uniqueNumberCount.toString();
     }
   };
-  //console.log('done inside');
 })();
-//console.log('done outside');
