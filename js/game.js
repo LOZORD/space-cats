@@ -102,6 +102,7 @@ var fontAssets = {
 var gameState = function(game){
   this.background;
   this.shipSprite;
+  this.enableFiring;
 
   this.key_left;
   this.key_right;
@@ -169,6 +170,7 @@ gameState.prototype = {
     this.bulletGroup.setAll('anchor.x', 0.5);
     this.bulletGroup.setAll('anchor.y', 0.5);
     this.bulletGroup.setAll('lifespan', bulletProperties.lifeSpan);
+    this.enableFiring = true;
 
     this.asteroidGroup.enableBody = true;
     this.asteroidGroup.physicsBodyType = Phaser.Physics.ARCADE;
@@ -214,7 +216,7 @@ gameState.prototype = {
     }
   },
   fire: function () {
-    if (game.time.now > this.bulletInterval) {            
+    if (game.time.now > this.bulletInterval && this.enableFiring) {            
       var bullet = this.bulletGroup.getFirstExists(false);
 
       if (bullet) {
@@ -281,11 +283,13 @@ gameState.prototype = {
     if (this.shipLives > 0) {
       game.time.events.add(Phaser.Timer.SECOND * shipProperties.timeToReset, this.resetShip, this);
       //TODO:Block firing.
+      this.enableFiring = false;
     }
   },
   resetShip: function() {
     this.shipSprite.reset(shipProperties.startX, shipProperties.startY);
     this.shipSprite.angle = -90;
+    this.enableFiring = true;
   },
   splitAsteroid: function(asteroid) {
     if (asteroidProperties[asteroid.key].nextSize) {
