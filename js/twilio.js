@@ -7,7 +7,7 @@ var server            = require('http').createServer(),
     port              = 3000;
 
 var textMessageResponse =
-  '<Response><Message>Thanks for letting us know.</Message></Response>';
+  '<Response><Message>Thanks for letting SPACE CAT know.</Message></Response>';
 
 var incoming = function(message) {
   console.log('RECEIVED: %s', message);
