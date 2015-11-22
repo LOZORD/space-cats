@@ -195,23 +195,38 @@ gameState.prototype = {
   },
   checkPlayerInput: function() {
     if (this.key_left.isDown) {
-      this.shipSprite.body.angularVelocity = -shipProperties.angularVelocity;
+      this.rotateShipLeft();
     } else if (this.key_right.isDown) {
-      this.shipSprite.body.angularVelocity = shipProperties.angularVelocity;
+      this.rotateShipRight();
     } else {
-      this.shipSprite.body.angularVelocity = 0;
+      this.stopShipRotation();
     }
 
     if (this.key_thrust.isDown) {
-      game.physics.arcade.accelerationFromRotation(this.shipSprite.rotation,
-          shipProperties.acceleration, this.shipSprite.body.acceleration);
+      this.accelerateShip();
     } else {
-      this.shipSprite.body.acceleration.set(0);
+      this.stopAcceleration();
     }
 
     if (this.key_fire.isDown) {
       this.fire();
     }
+  },
+  rotateShipLeft: function() {
+    this.shipSprite.body.angularVelocity = -shipProperties.angularVelocity;
+  },
+  rotateShipRight: function() {
+    this.shipSprite.body.angularVelocity = shipProperties.angularVelocity;
+  },
+  stopShipRotation: function() {
+    this.shipSprite.body.angularVelocity = 0;
+  },
+  accelerateShip: function() {
+    game.physics.arcade.accelerationFromRotation(this.shipSprite.rotation,
+        shipProperties.acceleration, this.shipSprite.body.acceleration);
+  },
+  stopAcceleration: function() {
+    this.shipSprite.body.acceleration.set(0);
   },
   checkBoundaries: function (sprite) {
     if (sprite.x < 0) {
